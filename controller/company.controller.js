@@ -1,36 +1,37 @@
-const asyncHandler = require("../middleware/asyncHandler");
-const RegisterCompany = require("../models/registerCompanyModel");
+const asyncHandler = require('../middleware/asyncHandler');
+const RegisterCompany = require('../models/registerCompanyModel');
 
-//Create a Company Register
 const createCompanyRegister = asyncHandler(async (req, res) => {
   const payload = {
     companyName: req.body.companyName?.trim(),
     description: req.body.description?.trim(),
-    industry: req.body.industry,
+    industry: req.body.industry?.trim(),
     location: req.body.location?.trim(),
     website: req.body.website?.trim(),
     employeeCount: req.body.employeeCount,
     logo: req.body.logo || null,
+    recruiterId: req.body.recruiterId || null,
   };
 
-  try {
-    const company = await RegisterCompany.create(payload);
+  
+  const company = await RegisterCompany.create(payload);
 
-    return res.status(201).json({
-      success: true,
-      message: 'Company registered successfully',
-      data: company,
-    });
-  } catch (error) {
-    console.error('create company error:', error);
-    console.error('validation details:', error.errors);
-
-    return res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to register company',
-      error: error.errors || null,
-    });
-  }
+  return res.status(201).json({
+    success: true,
+    message: 'Company registered successfully',
+    data: company,
+  });
 });
 
-module.exports = { createCompanyRegister };
+const getCompanyByRecruiterId = asyncHandler(async (req, res) => {
+  const { recruiterId } = req.params;
+
+  const company = await RegisterCompany.findOne({ recruiterId });
+
+  return res.status(200).json({
+    success: true,
+    data: company || null,
+  });
+});
+
+module.exports = { createCompanyRegister, getCompanyByRecruiterId };

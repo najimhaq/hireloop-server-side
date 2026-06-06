@@ -4,6 +4,7 @@ const registerCompanySchema = require('../schemas/registerCompanySchema');
 
 
 const RegisterCompany =
-  mongoose.models.RegisterCompany || mongoose.model('RegisterCompany', registerCompanySchema);
+  mongoose.models.RegisterCompany ||
+  mongoose.model('RegisterCompany', registerCompanySchema);
 
 module.exports = RegisterCompany;

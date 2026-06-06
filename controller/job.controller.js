@@ -3,8 +3,6 @@ const asyncHandler = require('../middleware/asyncHandler');
 
 // Create a new job post
 const createJobPost = asyncHandler(async (req, res) => {
-  //   console.log('req.body:', req.body);
-
   const payload = {
     jobTitle: req.body.jobTitle?.trim(),
     jobCategory: req.body.jobCategory,
@@ -20,17 +18,15 @@ const createJobPost = asyncHandler(async (req, res) => {
     benefits: req.body.benefits?.trim() || '',
     experienceLevel: req.body.experienceLevel,
     vacancies: Number(req.body.vacancies),
-    companyId: req.user?.companyId || 'company_123',
+    companyId: req.body.companyId || req.user?.companyId,
+    companyName: req.body.companyName || '',
+    companyLogo: req.body.companyLogo || '',
     status: 'active',
     isPubliclyVisible: true,
   };
 
-  //   console.log('payload:', payload);
-
   try {
     const job = await JobPost.create(payload);
-
-    //  console.log('saved job:', job);
 
     return res.status(201).json({
       success: true,
@@ -38,7 +34,6 @@ const createJobPost = asyncHandler(async (req, res) => {
       data: job,
     });
   } catch (error) {
-    // console.error('create job error:', error);
     console.error('validation details:', error.errors);
 
     return res.status(400).json({

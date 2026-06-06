@@ -18,18 +18,7 @@ const registerCompanySchema = new mongoose.Schema(
       type: String,
       required: [true, 'Industry is required'],
       trim: true,
-      enum: [
-        'Technology',
-        'Finance',
-        'Marketing',
-        'Healthcare',
-        'Education',
-        'E-commerce',
-        'Design',
-        'Software',
-        'Real Estate',
-        'Other',
-      ],
+      enum: ['Technology', 'Design', 'Marketing', 'Finance', 'Other'],
     },
 
     location: {
@@ -51,14 +40,18 @@ const registerCompanySchema = new mongoose.Schema(
         '1-10 employees',
         '11-50 employees',
         '51-200 employees',
-        '201-500 employees',
-        '500+ employees',
+        '201+ employees',
       ],
     },
 
     logo: {
       type: String,
       default: null,
+    },
+    recruiterId: {
+      type: String,
+      required: [true, 'Recruiter id is required'],
+      trim: true,
     },
   },
   {
