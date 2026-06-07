@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const JobPost = require('../models/jobPostModel');
 const asyncHandler = require('../middleware/asyncHandler');
 
@@ -59,6 +60,7 @@ const getAllJobPosts = asyncHandler(async (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'Jobs retrieved successfully',
+      count: jobs.length,
       data: jobs,
     });
   } catch (error) {
@@ -71,4 +73,32 @@ const getAllJobPosts = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { createJobPost, getAllJobPosts };
+//get single job by id
+
+const getSingleJobById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid job id',
+    });
+  }
+
+  const job = await JobPost.findById(id);
+
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      message: 'Job not found',
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Job retrieved successfully',
+    data: job,
+  });
+});
+
+module.exports = { createJobPost, getAllJobPosts, getSingleJobById };

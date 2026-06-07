@@ -13,7 +13,7 @@ const createCompanyRegister = asyncHandler(async (req, res) => {
     recruiterId: req.body.recruiterId || null,
   };
 
-  
+
   const company = await RegisterCompany.create(payload);
 
   return res.status(201).json({
@@ -23,6 +23,15 @@ const createCompanyRegister = asyncHandler(async (req, res) => {
   });
 });
 
+const getAllRegisteredCompanies = asyncHandler(async (req, res) => {
+  const companies = await RegisterCompany.find({});
+
+  return res.status(200).json({
+    success: true,
+    count: companies.length,
+    data: companies,
+  });
+})
 const getCompanyByRecruiterId = asyncHandler(async (req, res) => {
   const { recruiterId } = req.params;
 
@@ -34,4 +43,8 @@ const getCompanyByRecruiterId = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { createCompanyRegister, getCompanyByRecruiterId };
+module.exports = {
+  createCompanyRegister,
+  getAllRegisteredCompanies,
+  getCompanyByRecruiterId,
+};
