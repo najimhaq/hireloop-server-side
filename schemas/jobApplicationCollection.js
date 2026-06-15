@@ -7,6 +7,7 @@ const jobApplicationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Job',
       required: [true, 'Job reference is required'],
+      index: true,
     },
 
     applicant: {

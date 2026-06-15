@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/asyncHandler');
 const JobApplication = require('../models/jobApplicationModel');
 const Job = require('../models/jobPostModel');
 
+// Get all job applications
 const getAllJobApplications = asyncHandler(async (req, res) => {
   const jobApplications = await JobApplication.find({}).lean();
 
@@ -13,7 +14,23 @@ const getAllJobApplications = asyncHandler(async (req, res) => {
     data: jobApplications,
   });
 });
+// Get job applications by applicant
+const getApplicationsByApplicant = asyncHandler(async (req, res) => {
+  const { applicantId } = req.params;
 
+  const jobApplications = await JobApplication.find({
+    applicant: applicantId, // MongoDB এ applicant field এ match করবে
+  }).lean();
+
+  return res.status(200).json({
+    success: true,
+    message: 'Job applications retrieved successfully',
+    count: jobApplications.length,
+    data: jobApplications,
+  });
+});
+
+// Get a single job application by id
 const getSingleJobApplicationById = asyncHandler(async (req, res) => {
   const jobApplication = await JobApplication.findById(req.params.id).lean();
 
@@ -24,7 +41,7 @@ const getSingleJobApplicationById = asyncHandler(async (req, res) => {
   });
 });
 
-// Create a new job application
+// Create a new job application post
 const createJobApplication = asyncHandler(async (req, res) => {
   const {
     jobId,
@@ -88,6 +105,7 @@ const createJobApplication = asyncHandler(async (req, res) => {
 
 module.exports = {
   getAllJobApplications,
+  getApplicationsByApplicant,
   getSingleJobApplicationById,
   createJobApplication,
 };
