@@ -37,7 +37,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    token, // ← এটাই frontend নেবে
+    token,
     data: {
       _id: user._id,
       name: user.name,
