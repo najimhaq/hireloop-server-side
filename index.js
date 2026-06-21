@@ -14,6 +14,8 @@ const companyRouter = require('./routes/company.route');
 const jobRouter = require('./routes/job.route');
 const applicationRouter = require('./routes/application.route');
 
+const webhookRouter = require('./routes/webhook');
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -26,7 +28,7 @@ app.use(
   })
 );
 
-
+app.use('/api/webhooks', webhookRouter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
