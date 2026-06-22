@@ -4,6 +4,8 @@ const Stripe = require('stripe');
 
 const User = require('../models/userModel');
 const Subscription = require('../models/subscriptionModel');
+const sendResponse = require('../utils/sendResponse');
+const asyncHandler = require('../middleware/asyncHandler');
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -11,7 +13,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 router.post(
   '/stripe',
   express.raw({ type: 'application/json' }), // ⚠️ must be raw body
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const signature = req.headers['stripe-signature'];
 
     let event;
@@ -75,8 +77,14 @@ router.post(
       }
     }
 
-    res.json({ received: true });
-  }
+    sendResponse(res, {
+      statusCode: 200,
+      message: 'Webhook received',
+      data: {
+        received: true,
+      },
+    });
+  })
 );
 
 module.exports = router;

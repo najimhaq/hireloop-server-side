@@ -19,8 +19,13 @@ const getApplicationsByApplicant = asyncHandler(async (req, res) => {
   const { applicantId } = req.params;
 
   const jobApplications = await JobApplication.find({
-    applicant: applicantId, // MongoDB এ applicant field এ match করবে
-  }).lean();
+    applicant: applicantId,
+  })
+    .populate('job', 'jobTitle companyName location jobType')
+    .sort({ createdAt: -1 })
+    .lean();
+
+  console.log('First app job field:', jobApplications[0]?.job); // ← এটা দেখো
 
   return res.status(200).json({
     success: true,

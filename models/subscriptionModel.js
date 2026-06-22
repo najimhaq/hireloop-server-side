@@ -18,7 +18,6 @@ const subscriptionSchema = new mongoose.Schema(
   { timestamps: true, collection: 'subscriptions' }
 );
 
-// ✅ Schema আর Model একই file এ রাখো
 const Subscription =
   mongoose.models.Subscription ||
   mongoose.model('Subscription', subscriptionSchema);

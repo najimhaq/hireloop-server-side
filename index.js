@@ -29,6 +29,7 @@ app.use(
 );
 
 app.use('/api/webhooks', webhookRouter);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
