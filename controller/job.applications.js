@@ -18,14 +18,17 @@ const getAllJobApplications = asyncHandler(async (req, res) => {
 const getApplicationsByApplicant = asyncHandler(async (req, res) => {
   const { applicantId } = req.params;
 
-  const jobApplications = await JobApplication.find({
-    applicant: applicantId,
-  })
-    .populate('job', 'jobTitle companyName location jobType')
+  const jobApplications = await JobApplication.find({ applicant: applicantId })
+    .populate({
+      path: 'job',
+      select: 'jobTitle jobType location isRemote companyId',
+      populate: {
+        path: 'companyId',
+        select: 'companyName logo location', // ✅ Company schema এর fields
+      },
+    })
     .sort({ createdAt: -1 })
     .lean();
-
-  console.log('First app job field:', jobApplications[0]?.job); // ← এটা দেখো
 
   return res.status(200).json({
     success: true,

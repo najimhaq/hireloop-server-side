@@ -79,10 +79,10 @@ const jobPostSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
-
     companyId: {
-      type: String,
-      required: [true, 'Company ID is required'],
+      type: mongoose.Schema.Types.ObjectId, // ✅ String → ObjectId
+      ref: 'RegisterCompany',
+      required: [true, 'RegisterCompany ID is required'],
     },
     status: {
       type: String,
@@ -98,7 +98,5 @@ const jobPostSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-
 
 module.exports = jobPostSchema;

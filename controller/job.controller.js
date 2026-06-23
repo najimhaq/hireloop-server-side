@@ -51,11 +51,13 @@ const getAllJobPosts = asyncHandler(async (req, res) => {
     const { companyId, status } = req.query;
 
     const filter = {};
-
     if (companyId) filter.companyId = companyId;
     if (status) filter.status = status;
 
-    const jobs = await JobPost.find(filter);
+    const jobs = await JobPost.find(filter).populate({
+      path: 'companyId',
+      select: 'companyName logo location',
+    });
 
     return res.status(200).json({
       success: true,
