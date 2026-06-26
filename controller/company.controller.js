@@ -1,5 +1,5 @@
 const asyncHandler = require('../middleware/asyncHandler');
-const RegisterCompany = require('../models/registerCompanyModel');
+const RegisterCompany = require('../schemas/registerCompanySchema');
 
 const createCompanyRegister = asyncHandler(async (req, res) => {
   const payload = {
@@ -12,7 +12,6 @@ const createCompanyRegister = asyncHandler(async (req, res) => {
     logo: req.body.logo || null,
     recruiterId: req.body.recruiterId || null,
   };
-
 
   const company = await RegisterCompany.create(payload);
 
@@ -31,7 +30,7 @@ const getAllRegisteredCompanies = asyncHandler(async (req, res) => {
     count: companies.length,
     data: companies,
   });
-})
+});
 const getCompanyByRecruiterId = asyncHandler(async (req, res) => {
   const { recruiterId } = req.params;
 

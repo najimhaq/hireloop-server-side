@@ -1,5 +1,6 @@
 const asyncHandler = require('../middleware/asyncHandler');
-const User = require('../models/userModel');
+const { default: User } = require('../schemas/userSchema');
+
 const generateToken = require('../utils/generateToken');
 
 const getAllUsers = asyncHandler(async (req, res) => {

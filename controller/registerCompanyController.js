@@ -1,5 +1,5 @@
-const asyncHandler = require("../middleware/asyncHandler");
-const RegisterCompany = require("../models/registerCompanyModel");
+const asyncHandler = require('../middleware/asyncHandler');
+const RegisterCompany = require('../schemas/registerCompanySchema');
 
 // controllers/registerCompanyController.js
 const getCompanyById = asyncHandler(async (req, res) => {

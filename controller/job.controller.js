@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const JobPost = require('../models/jobPostModel');
 const asyncHandler = require('../middleware/asyncHandler');
+const JobPost = require('../schemas/jobPostSchema');
 
 // Create a new job post
 const createJobPost = asyncHandler(async (req, res) => {

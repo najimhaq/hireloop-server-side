@@ -59,4 +59,8 @@ const registerCompanySchema = new mongoose.Schema(
   }
 );
 
-module.exports = registerCompanySchema;
+const RegisterCompany =
+  mongoose.models.RegisterCompany ||
+  mongoose.model('RegisterCompany', registerCompanySchema);
+
+module.exports = RegisterCompany;

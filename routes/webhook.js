@@ -2,11 +2,10 @@
 const express = require('express');
 const Stripe = require('stripe');
 
-const User = require('../models/userModel');
-const Subscription = require('../models/subscriptionModel');
 const sendResponse = require('../utils/sendResponse');
 const asyncHandler = require('../middleware/asyncHandler');
-
+const Subscription = require('../schemas/subscriptionSchema');
+const { default: User } = require('../schemas/userSchema');
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 

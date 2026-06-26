@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const asyncHandler = require('../middleware/asyncHandler');
-const JobApplication = require('../models/jobApplicationModel');
-const Job = require('../models/jobPostModel');
+
+const JobApplication = require('../schemas/jobApplicationCollection');
 
 // Get all job applications
 const getAllJobApplications = asyncHandler(async (req, res) => {
