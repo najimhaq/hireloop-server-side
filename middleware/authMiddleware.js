@@ -4,6 +4,7 @@ const { fromNodeHeaders } = require('better-auth/node');
 const protect = async (req, res, next) => {
   try {
     const { auth } = await import('../lib/auth.js');
+    console.log('cookies:', req.headers.cookie);
 
     const session = await auth.api.getSession({
       headers: fromNodeHeaders(req.headers),

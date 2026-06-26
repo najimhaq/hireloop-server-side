@@ -50,8 +50,13 @@ const registerCompanySchema = new mongoose.Schema(
     },
     recruiterId: {
       type: String,
-      required: [true, 'Recruiter id is required'],
+      default: null,
       trim: true,
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
     },
   },
   {
