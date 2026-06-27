@@ -33,13 +33,11 @@ const createCompanyRegister = asyncHandler(async (req, res) => {
     recruiterId,
   });
 
-  return res
-    .status(201)
-    .json({
-      success: true,
-      message: 'Company registered successfully',
-      data: company,
-    });
+  return res.status(201).json({
+    success: true,
+    message: 'Company registered successfully',
+    data: company,
+  });
 });
 
 const getAllRegisteredCompanies = asyncHandler(async (req, res) => {
@@ -55,7 +53,7 @@ const getCompanyByRecruiterId = asyncHandler(async (req, res) => {
   return res.status(200).json({ success: true, data: company || null });
 });
 
-// update company status
+// update company status - admin
 const updateCompanyStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
 
@@ -66,7 +64,7 @@ const updateCompanyStatus = asyncHandler(async (req, res) => {
   const company = await RegisterCompany.findByIdAndUpdate(
     req.params.id,
     { status },
-    {returnDocument: 'after'}
+    { returnDocument: 'after' }
   );
 
   if (!company) {
@@ -82,5 +80,5 @@ module.exports = {
   createCompanyRegister,
   getAllRegisteredCompanies,
   getCompanyByRecruiterId,
-  updateCompanyStatus, // ✅ এখন এটা properly export হচ্ছে
+  updateCompanyStatus,
 };

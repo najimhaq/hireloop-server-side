@@ -44,6 +44,9 @@ const jobPostSchema = new mongoose.Schema(
       min: 0,
       validate: {
         validator: function (value) {
+          // ✅ this.minSalary না থাকলে skip করুন
+          if (this.minSalary === undefined || this.minSalary === null)
+            return true;
           return value >= this.minSalary;
         },
         message: 'Max salary must be greater than or equal to min salary',
@@ -86,8 +89,8 @@ const jobPostSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['active', 'closed', 'draft'],
-      default: 'active',
+      enum: ['pending', 'active', 'closed', 'draft'],
+      default: 'pending',
     },
     isPubliclyVisible: {
       type: Boolean,

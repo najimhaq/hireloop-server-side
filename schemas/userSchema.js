@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
       default: null,
+    },
+    status: {
+      type: String,
+      enum: ['active', 'inactive', 'suspended'],
+      default: 'inactive',
     },
     role: {
       type: String,
@@ -43,4 +48,4 @@ const userSchema = new mongoose.Schema(
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 
-export default User;
+module.exports = User;
