@@ -18,13 +18,22 @@ const getAllJobApplications = asyncHandler(async (req, res) => {
 const getApplicationsByApplicant = asyncHandler(async (req, res) => {
   const { applicantId } = req.params;
 
+  console.log('req.params:', req.params);
+
+  if (!applicantId || applicantId === 'undefined') {
+    return res.status(400).json({
+      success: false,
+      message: 'Valid applicantId is required',
+    });
+  }
+
   const jobApplications = await JobApplication.find({ applicant: applicantId })
     .populate({
       path: 'job',
       select: 'jobTitle jobType location isRemote companyId',
       populate: {
         path: 'companyId',
-        select: 'companyName logo location', // ✅ Company schema এর fields
+        select: 'companyName logo location',
       },
     })
     .sort({ createdAt: -1 })

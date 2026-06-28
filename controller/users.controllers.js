@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../schemas/userSchema');
 const asyncHandler = require('../middleware/asyncHandler');
-const generateToken = require('../utils/generateToken');
+
 
 // get all users
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -31,32 +31,6 @@ const getAllUsers = asyncHandler(async (req, res) => {
     currentPage: pageNum,
     totalPages: Math.ceil(total / limitNum),
     count: users.length,
-  });
-});
-
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid email or password',
-    });
-  }
-
-  const token = generateToken(user._id);
-
-  res.status(200).json({
-    success: true,
-    token,
-    data: {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
   });
 });
 

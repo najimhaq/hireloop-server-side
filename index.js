@@ -27,6 +27,12 @@ app.use(
     credentials: true,
   })
 );
+// app.js বা server.js এ
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`); // ← আসছে কিনা
+  console.log('Auth Header:', req.headers.authorization);
+  next();
+});
 
 app.use('/api/webhooks', webhookRouter);
 

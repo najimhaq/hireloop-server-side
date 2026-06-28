@@ -1,4 +1,5 @@
 // middleware/VerifyTokenMiddleware.js
+
 const { createRemoteJWKSet, jwtVerify } = require('jose-cjs');
 
 const JWKS = createRemoteJWKSet(
@@ -26,6 +27,7 @@ const verifyTokenMiddleware = async (req, res, next) => {
 
   try {
     const { payload } = await jwtVerify(token, JWKS);
+    console.log('=== JWT Payload ===', payload); 
     req.user = payload;
     console.log(payload);
     next();
