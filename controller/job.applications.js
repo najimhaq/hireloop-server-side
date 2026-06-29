@@ -3,17 +3,38 @@ const asyncHandler = require('../middleware/asyncHandler');
 
 const JobApplication = require('../schemas/jobApplicationCollection');
 
+
 // Get all job applications
 const getAllJobApplications = asyncHandler(async (req, res) => {
-  const jobApplications = await JobApplication.find({}).lean();
+  const { page = 1, limit = 50, status } = req.query;
+
+  const filter = {};
+  if (status) filter.status = status;
+
+  const pageNum = Math.max(1, parseInt(page));
+  const limitNum = Math.min(100, Math.max(1, parseInt(limit)));
+  const skip = (pageNum - 1) * limitNum;
+
+  const [applications, total] = await Promise.all([
+    JobApplication.find(filter)
+      .populate({ path: 'job', populate: { path: 'companyId', select: 'companyName logo' } })
+      .populate({ path: 'applicant', select: 'name email image' })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum),
+
+    JobApplication.countDocuments(filter),
+  ]);
 
   return res.status(200).json({
     success: true,
-    message: 'Job applications retrieved successfully',
-    count: jobApplications.length,
-    data: jobApplications,
+    data: applications,
+    total,
+    currentPage: pageNum,
+    totalPages: Math.ceil(total / limitNum),
   });
 });
+
 // Get job applications by applicant
 const getApplicationsByApplicant = asyncHandler(async (req, res) => {
   const { applicantId } = req.params;
@@ -120,9 +141,41 @@ const createJobApplication = asyncHandler(async (req, res) => {
   }
 });
 
+//maybe admin er jonno
+const updateApplicationStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const validStatuses = [
+    'pending',
+    'reviewed',
+    'shortlisted',
+    'rejected',
+    'hired',
+  ];
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ success: false, message: 'Invalid status' });
+  }
+
+  const application = await JobApplication.findByIdAndUpdate(
+    id,
+    { status },
+    { new: true }
+  );
+
+  if (!application) {
+    return res
+      .status(404)
+      .json({ success: false, message: 'Application not found' });
+  }
+
+  return res.status(200).json({ success: true, data: application });
+});
+
 module.exports = {
   getAllJobApplications,
   getApplicationsByApplicant,
   getSingleJobApplicationById,
   createJobApplication,
+  updateApplicationStatus,
 };

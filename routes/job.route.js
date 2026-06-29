@@ -9,12 +9,39 @@ const {
   deleteJobById,
   updateJobStatus,
 } = require('../controller/job.controller');
+const { protect } = require('../middleware/tokenProtect');
+const requireRole = require('../middleware/requireRole');
 
+
+
+// ── Public ──
 jobRouter.get('/api/jobs', getAllJobPosts);
 jobRouter.get('/api/jobs/:id', getSingleJobById);
-jobRouter.post('/api/jobs', createJobPost);
-jobRouter.put('/api/jobs/:id', updateJobById);
-jobRouter.delete('/api/jobs/:id', deleteJobById);
-jobRouter.patch('/api/jobs/:id/status', updateJobStatus);
+
+// ── Protected (recruiter / admin only) ──
+jobRouter.post(
+  '/api/jobs',
+  protect,
+  requireRole('recruiter', 'admin'),
+  createJobPost
+);
+jobRouter.put(
+  '/api/jobs/:id',
+  protect,
+  requireRole('recruiter', 'admin'),
+  updateJobById
+);
+jobRouter.delete(
+  '/api/jobs/:id',
+  protect,
+  requireRole('recruiter', 'admin'),
+  deleteJobById
+);
+jobRouter.patch(
+  '/api/jobs/:id/status',
+  protect,
+  requireRole('recruiter', 'admin'),
+  updateJobStatus
+);
 
 module.exports = jobRouter;

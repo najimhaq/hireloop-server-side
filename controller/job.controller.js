@@ -153,7 +153,7 @@ const updateJobById = asyncHandler(async (req, res) => {
 
   const job = await JobPost.findByIdAndUpdate(id, req.body, {
     returnDocument: 'after',
-    runValidators: false, 
+    runValidators: false,
   });
 
   if (!job) {

@@ -7,6 +7,12 @@ const asyncHandler = require('../middleware/asyncHandler');
 const getAllUsers = asyncHandler(async (req, res) => {
   const { role, status, page = 1, limit = 10 } = req.query;
 
+  console.log(req.user)
+
+  if (req.user?.role !== 'admin') {
+    return res.status(403).json({ success: false, message: 'Forbidden' });
+  }
+
   const filter = {};
   if (role) filter.role = role;
   if (status) filter.status = status;

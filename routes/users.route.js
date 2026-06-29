@@ -7,12 +7,22 @@ const {
   updateUserRole,
   deleteUser,
 } = require('../controller/users.controllers');
-const verifyTokenMiddleware = require('../middleware/VerifyTokenMiddleware');
-const requireAdmin = require('../middleware/requireAdmin');
+const requireRole = require('../middleware/requireRole');
+const { protect } = require('../middleware/tokenProtect');
 
-userRouter.get('/api/users', getAllUsers);
-userRouter.patch('/api/users/:id/status', updateUserStatus);
-userRouter.patch('/api/users/:id/role', updateUserRole);
-userRouter.delete('/api/users/:id', deleteUser);
+userRouter.get('/api/users', protect, requireRole('admin'), getAllUsers);
+userRouter.patch(
+  '/api/users/:id/status',
+  requireRole('admin'),
+  protect,
+  updateUserStatus
+);
+userRouter.patch(
+  '/api/users/:id/role',
+  requireRole('admin'),
+  protect,
+  updateUserRole
+);
+userRouter.delete('/api/users/:id', requireRole('admin'), protect, deleteUser);
 
 module.exports = userRouter;

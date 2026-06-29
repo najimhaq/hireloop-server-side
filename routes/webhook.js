@@ -72,7 +72,7 @@ router.post(
           plan: 'free',
           updatedAt: new Date(),
         });
-        console.log(`🔄 ${sub.userEmail}: downgraded → free`);
+        // console.log(`🔄 ${sub.userEmail}: downgraded → free`);
       }
     }
 
